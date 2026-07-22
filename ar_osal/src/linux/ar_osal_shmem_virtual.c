@@ -1,12 +1,12 @@
 /**
  *
- * \file ar_osal_shmem.c
+ * \file ar_osal_shmem_virtual.c
  *
  * \brief
  *      This file has implementation for Virtual Address based shared memory allocation for DSP.
 
  * \copyright
- *  Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+ *  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  *  SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -29,7 +29,7 @@
  *  Nonzero -- Failure
  */
 _IRQL_requires_max_(PASSIVE_LEVEL)
-int32_t ar_shmem_validate_sys_id(_In_ uint8_t num_sys_id, _In_ uint8_t *sys_id)
+int32_t ar_shmem_validate_sys_id(_In_ uint8_t num_sys_id, _In_ ar_shmem_proc_info *sys_id)
 {
     PAGED_FUNCTION();
     int32_t status = AR_EOK;
@@ -41,12 +41,12 @@ int32_t ar_shmem_validate_sys_id(_In_ uint8_t num_sys_id, _In_ uint8_t *sys_id)
 
     for (uint8_t i = 0; i < num_sys_id; i++)
     {
-        if (AR_AUDIO_DSP != sys_id[i] &&
-            AR_MODEM_DSP != sys_id[i] &&
-            AR_SENSOR_DSP != sys_id[i] &&
-            AR_COMPUTE_DSP != sys_id[i] &&
-            AR_APSS != sys_id[i] &&
-            AR_APSS2 != sys_id[i])
+        if (AR_AUDIO_DSP != sys_id[i].proc_id &&
+            AR_MODEM_DSP != sys_id[i].proc_id &&
+            AR_SENSOR_DSP != sys_id[i].proc_id &&
+            AR_COMPUTE_DSP != sys_id[i].proc_id &&
+            AR_APSS != sys_id[i].proc_id &&
+            AR_APSS2 != sys_id[i].proc_id)
         {
             status = AR_EBADPARAM;
             break;
@@ -66,6 +66,29 @@ end:
  */
 _IRQL_requires_max_(PASSIVE_LEVEL)
 int32_t ar_shmem_init(void)
+{
+    PAGED_FUNCTION();
+    return AR_EOK;
+}
+
+/**
+ * \brief Initialize the shared memory interface using a list of processor domains (V2 API).
+ *
+ * This V2 API selects the appropriate shared memory implementation
+ * based on the provided list of processor domain IDs.
+ *
+ * Passing num_master_procs = 0 results in behavior equivalent to the
+ * V1 API (ar_shmem_init), allowing a smooth transition from V1 to V2.
+ *
+ * \param[in] num_master_procs   Number of processor domain IDs.
+ * \param[in] master_procs       Pointer to an array of processor domain IDs.
+ *
+ * \return
+ *  0        -- Success
+ *  Nonzero  -- Failure
+ */
+_IRQL_requires_max_(PASSIVE_LEVEL)
+int32_t ar_shmem_init_v2(uint32_t num_master_procs, uint32_t *master_procs)
 {
     PAGED_FUNCTION();
     return AR_EOK;
@@ -112,7 +135,11 @@ int32_t ar_shmem_alloc(_Inout_ ar_shmem_info *info)
     info->mem_type = AR_SHMEM_VIRTUAL_MEMORY;
 
 
-    posix_memalign(&p, SHMEM_4K_ALIGNMENT,info->buf_size);
+    if (0 != posix_memalign(&p, SHMEM_4K_ALIGNMENT, info->buf_size)) {
+        AR_LOG_ERR(AR_OSAL_SHMEM_LOG_TAG, "Error: posix_memalign failed");
+        status = AR_ENOMEMORY;
+        goto end;
+    }
     info->vaddr = p;
     AR_LOG_ERR(AR_OSAL_SHMEM_LOG_TAG, "vaddr(0x%p)", info->vaddr);
     if (NULL == info->vaddr)

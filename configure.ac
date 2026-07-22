@@ -7,7 +7,7 @@
 # Requires autoconf tool later than 2.61
 AC_PREREQ(2.69)
 
-AC_INIT([arosp],1.0.1)
+AC_INIT([arosp],1.0.0)
 # Does not strictly follow GNU Coding standards
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 LT_INIT
@@ -79,7 +79,9 @@ AM_CONDITIONAL([USES_ATS_TRANSPORT_TCPIP], [test "x${with_ats_transport_tcp_ip}"
 
 AC_ARG_WITH([dummy_diag],
       AC_HELP_STRING([--with-dummy_diag],
-         [use dummy diag instead of libdiag]))
+         [use dummy diag instead of libdiag (default is yes)]),
+         [with_dummy_diag=$withval],
+         [with_dummy_diag=yes])
 
 if (test "x${with_dummy_diag}" = "xno"); then
         PKG_CHECK_MODULES([DIAG], [diag])
@@ -94,6 +96,12 @@ AC_ARG_WITH([audio_dma_support],
     [with_audio_dma_support=$withval],
     [with_audio_dma_support=no])
 AM_CONDITIONAL([AUDIO_DMA_SUPPORT], [test "x${with_audio_dma_support}" = "xyes"])
+
+AC_ARG_WITH([libdiag_headers],
+    AS_HELP_STRING([--with-libdiag_headers],[use libdiag headers only (default is no)]),
+    [with_libdiag_headers=$withval],
+    [with_libdiag_headers=no])
+AM_CONDITIONAL([LIBDIAG_HEADERS], [test "x${with_libdiag_headers}" = "xyes"])
 
 AC_ARG_WITH([libion],
     AS_HELP_STRING([use libion (default is no)]),

@@ -4,14 +4,18 @@
 *    Defines platform agnostic APIs for sending log packets to
 *    the PC.
 * \copyright
-*  Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+*  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 *  SPDX-License-Identifier: BSD-3-Clause
 */
 
 #include "ar_osal_log_pkt_op.h"
 #include "ar_osal_error.h"
 #include "ar_osal_log.h"
+#ifndef USE_LIBDIAG_HEADERS
 #include "comdef.h"
+#else
+#include "diag_comdef.h"
+#endif
 #include "diag_lsm.h"
 #include "log.h"
 

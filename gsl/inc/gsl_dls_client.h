@@ -12,7 +12,7 @@
  *        recieve data for.
  *
  * \copyright
- *      Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+ *      Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  *      SPDX-License-Identifier: BSD-3-Clause
  */
 #ifdef __cplusplus
@@ -63,6 +63,14 @@ struct gsl_dls_client_ctxt
      * lock used in conjuction with above signal
      */
     ar_osal_mutex_t sig_lock;
+    /**
+     * for signaling when to return used buffers to spf
+     */
+    struct gsl_signal ready_buffer_sig;
+    /**
+     * List of used buffers to send to spf
+     */
+    struct gsl_dls_ready_buffer_index_list_t used_buffers;
 };
 
 #ifdef __cplusplus

@@ -5,7 +5,7 @@
  * \brief
  *    This file contains Audio-Sensor Proxy Service Commands Data Structures
  *
- *    Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+ *    Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  *    SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -19,6 +19,7 @@
 #include "asps_ads_usecase_api.h"
 #include "asps_us_rendering_usecase_api.h"
 #include "asps_sdz_usecase_api.h"
+#include "asps_asr_usecase_api.h"
 
 #ifdef __cplusplus
 extern "C" {

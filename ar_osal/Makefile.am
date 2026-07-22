@@ -6,8 +6,7 @@ AM_CFLAGS = -Wall -Wno-pointer-to-int-cast -Wno-error=unused-function \
             -Wno-error=unused-label
 AM_CFLAGS += -D__unused=__attribute__\(\(__unused__\)\) -DLINUX_ENABLED
 
-AM_CFLAGS += -I$(srcdir)/api \
-             -I$(top_srcdir)/acdb/ats/transports/diag/linux/inc/
+AM_CFLAGS += -I$(srcdir)/api
 
 osal_sources = ./api/ar_osal_error.h \
                ./api/ar_osal_file_io.h \
@@ -41,21 +40,31 @@ osal_c_sources = ./src/linux/ar_osal_file_io.c \
 
 if ARGS_VENDOR_QCOM
 if AUDIO_DMA_SUPPORT
-osal_c_sources += ./src/linux/qcom/ar_osal_shmem_db.c
+osal_c_sources += ./src/linux/qcom/ar_osal_shmem_db.c \
+                  ./src/linux/qcom/ar_osal_shmem.c \
+                  ./src/linux/qcom/ar_osal_shmem_ap.c
 else # Use ion based shmem implementation.
 osal_c_sources += ./src/linux/qcom/ar_osal_shmem_ion.c
 endif
 else #!ARGS_VENDOR_QCOM
+if AUDIO_DMA_SUPPORT
+osal_c_sources += ./src/linux/ar_osal_shmem_phy.c
+else
 # Use virtual memory based shmem implementation
-osal_c_sources += ./src/linux/ar_osal_shmem.c
+osal_c_sources += ./src/linux/ar_osal_shmem_virtual.c
+endif
 endif
 
 if USE_DUMMY_DIAG
+AM_CFLAGS += -I$(top_srcdir)/acdb/ats/transports/diag/linux/inc/
 osal_c_sources += ./src/linux/ar_osal_stub_log_pkt_op.c
 else
 osal_c_sources += ./src/linux/qcom/ar_osal_log_pkt_op.c
 endif
 
+if LIBDIAG_HEADERS
+AM_CFLAGS += -DUSE_LIBDIAG_HEADERS
+endif
 
 if ARGS_USE_SYSLOG
 AM_CFLAGS += -DAR_OSAL_USE_SYSLOG
@@ -79,6 +88,12 @@ endif
 if USE_GLIB
 libar_osal_la_LIBADD += -lglib-2.0
 AM_CFLAGS += $(GLIB_CFLAGS) -D_GNU_SOURCE -include glib.h
+endif
+
+if USE_DUMMY_DIAG
+#dummy diag, do not link real diag libs
+else
+libar_osal_la_LIBADD += -ldiag
 endif
 
 if USE_G_STR_FUNC

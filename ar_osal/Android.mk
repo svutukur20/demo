@@ -1,12 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := libarosal_headers
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/api
-LOCAL_PROPRIETARY_MODULE := true
-include $(BUILD_HEADER_LIBRARY)
-
-include $(CLEAR_VARS)
 
 #----------------------------------------------------------------------------
 #                 Common definitons
@@ -56,7 +50,9 @@ LOCAL_SRC_FILES += src/linux/qcom/dyn_pd/ar_osal_dyn_pd.c
 ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION), 4.14 4.19 5.4))
 LOCAL_SRC_FILES += src/linux/qcom/ar_osal_shmem_ion.c
 else
-LOCAL_SRC_FILES += src/linux/qcom/ar_osal_shmem_db.c
+LOCAL_SRC_FILES += src/linux/qcom/ar_osal_shmem_db.c \
+                   src/linux/qcom/ar_osal_shmem.c \
+                   src/linux/qcom/ar_osal_shmem_ap.c
 endif
 
 LOCAL_SHARED_LIBRARIES := liblog \
@@ -65,7 +61,7 @@ LOCAL_SHARED_LIBRARIES := liblog \
 LOCAL_MODULE := liblx-osal
 LOCAL_MODULE_OWNER := qti
 LOCAL_MODULE_TAGS := optional
-LOCAL_PROPRIETARY_MODULE := true
+LOCAL_VENDOR_MODULE := true
 
 ifneq ($(strip $(AUDIO_FEATURE_OLD_ION_IMPL)), true)
         include $(LIBION_HEADER_PATH_WRAPPER)
@@ -92,6 +88,10 @@ ifeq ($(TARGET_PD_SERVICE_ENABLED), true)
     LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/qmi-framework/inc
     LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/qmi/inc
     LOCAL_CFLAGS += -DAR_OSAL_USE_PD_NOTIFIER
+endif
+
+ifeq ($(AUDIO_FEATURE_ARE_ON_MDSP), true)
+    LOCAL_CFLAGS += -DMDSP_PROC
 endif
 
 LOCAL_SHARED_LIBRARIES += libcutils

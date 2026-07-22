@@ -4,7 +4,7 @@
  * \brief
  *      Main entry point for Graph Service Layer (GSL)
  *
- *  Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+ *  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  *  SPDX-License-Identifier: BSD-3-Clause
  */
 #include "gsl_intf.h"
@@ -36,6 +36,7 @@
 #include "apm_api.h"
 #include "apm_memmap_api.h"
 #include "apm_graph_properties.h"
+#include "gsl_cshm_mgr.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -511,7 +512,7 @@ static void gsl_main_ssr_callback(enum spf_ss_state_t state,
 	 */
 	if (master_proc == 0)
 		return;
-
+	gsl_cshm_handle_ssr(state, spf_ss_mask);
 	if (state == GSL_SPF_SS_STATE_DN) {
 		/*
 		 * unblock any memory map operations in progress, for now assume master
@@ -902,6 +903,8 @@ int32_t gsl_init(struct gsl_init_data *init_data)
 		GSL_ERR("acdb_init failed %d", rc);
 		goto deinit_gpr;
 	}
+
+	gsl_spf_timeouts_init();
 
 	rc = gsl_sg_pool_init();
 	if (rc) {

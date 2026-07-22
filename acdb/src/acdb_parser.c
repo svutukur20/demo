@@ -6,7 +6,7 @@
 *		Handle parsing the ACDB Data files.
 *
 * \copyright
-*  Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+*  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 *  SPDX-License-Identifier: BSD-3-Clause
 *
 *=============================================================================
@@ -91,7 +91,7 @@ int32_t acdb_parser_get_chunk(
         header = (acdb_chunk_header_t*)start_ptr;
 
         uint8_t* next_chunk = start_ptr + sizeof(acdb_chunk_header_t) + header->size;
-        if (next_chunk > end_ptr || header->size == 0)
+        if (next_chunk > end_ptr)
         {
             status = AR_EFAILED;
             break;

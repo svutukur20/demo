@@ -26,6 +26,7 @@ spf_sources = ./api/apm/apm_api.h \
                 ./api/ar_utils/ar_defs.h \
                 ./api/asps/asps_ads_usecase_api.h \
                 ./api/asps/asps_upd_usecase_api.h \
+                ./api/asps/asps_asr_usecase_api.h \
                 ./api/asps/asps_acd_usecase_api.h \
                 ./api/asps/asps_acm_api.h \
                 ./api/modules/aac_decoder_api.h \
@@ -49,6 +50,7 @@ spf_sources = ./api/apm/apm_api.h \
                 ./api/modules/audio_hw_clk_api.h \
                 ./api/modules/audio_hw_dma_api.h \
                 ./api/modules/audio_hw_lpm_api.h \
+                ./api/modules/audio_if_api.h \
                 ./api/modules/celt_enc_api.h \
                 ./api/modules/codec_dma_api.h \
                 ./api/modules/codec_metadata_api.h \
@@ -62,6 +64,7 @@ spf_sources = ./api/apm/apm_api.h \
                 ./api/modules/data_logging_api.h \
                 ./api/modules/data_marker_api.h \
                 ./api/modules/detection_cmn_api.h \
+                ./api/modules/history_buffer_api.h \
                 ./api/modules/display_port_api.h \
                 ./api/modules/dls_api.h \
                 ./api/modules/dls_log_pkt_hdr_api.h \
@@ -103,6 +106,7 @@ spf_sources = ./api/apm/apm_api.h \
                 ./api/modules/rtm_logging_api.h \
                 ./api/modules/rt_proxy_api.h \
                 ./api/modules/rx_haptics_api.h \
+                ./api/modules/sa_hdt_api.h \
                 ./api/modules/sbc_decoder_api.h \
                 ./api/modules/sbc_encoder_api.h \
                 ./api/modules/sh_mem_pull_push_mode_api.h \
@@ -141,6 +145,7 @@ asps_sources =  ./api/asps/asps_ads_usecase_api.h \
                 ./api/asps/asps_upd_usecase_api.h \
                 ./api/asps/asps_acd_usecase_api.h \
                 ./api/asps/asps_acm_api.h \
+                ./api/asps/asps_asr_usecase_api.h \
                 ./api/asps/asps_sdz_usecase_api.h \
                 ./api/asps/asps_us_rendering_usecase_api.h
 

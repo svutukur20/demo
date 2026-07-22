@@ -4,7 +4,11 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := libar-gsl
 LOCAL_MODULE_OWNER := qti
 LOCAL_MODULE_TAGS := optional
-LOCAL_PROPRIETARY_MODULE := true
+LOCAL_VENDOR_MODULE := true
+
+ifeq ($(strip $(AUDIO_FEATURE_ENABLED_CLIENT_SHM)),true)
+  LOCAL_CFLAGS += -DCLIENT_SHM_ENABLED
+endif
 
 LOCAL_SRC_FILES := src/gsl_main.c \
     src/gsl_graph.c\
@@ -18,10 +22,12 @@ LOCAL_SRC_FILES := src/gsl_main.c \
     src/gsl_rtc_main.c\
     src/gsl_dynamic_module_mgr.c\
     src/gsl_mdf_utils.c\
+    src/gsl_spf_timeout.c\
     src/gsl_datapath.c\
     src/gsl_msg_builder.c\
     src/gsl_global_persist_cal.c\
-    src/gsl_dls_client.c
+    src/gsl_dls_client.c\
+    src/gsl_cshm_mgr.c
 
 LOCAL_HEADER_LIBRARIES := libspf-headers
 LOCAL_SHARED_LIBRARIES := \

@@ -14,7 +14,7 @@
 *     #ifdef WINPC
 *
 * \copyright
-*     Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
+*     Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 *     SPDX-License-Identifier: BSD-3-Clause
 *
 *==============================================================================
@@ -25,10 +25,6 @@
       --------------------
  */
 
-/** Definitions for char_t, word, etc. */
-#ifndef ATS_USES_DUMMY_DIAG
-#include "comdef.h"
-#endif
 #include "audtpi.h"
 #include "diagcmd.h"
 #include "diagpkt.h"
